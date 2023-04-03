@@ -51,3 +51,11 @@ body {
     text-align: center;
     width: 200px;
 }
+
+#main-btn {
+    font-size: 16px;
+    padding: 10px;
+    font-weight: bold;
+    text-align: center;
+    width: 200px;
+}
