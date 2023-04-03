@@ -26,9 +26,9 @@ startBtn.addEventListener('click', function() {
 // Questions for the quiz
 const questions = [
   {
-    question: 'What does CSS stand for?',
-    choices: ['Cascading Style Sheets', 'Cascade Style Sheets', 'Custom Style Sheets', 'None of the answers are right'],
-    correctAnswer: 'Cascading Style Sheets'
+    question: 'What do Full Stack Web Developers work with?',
+    choices: ['Frontend', 'Backend', 'Both', 'Neither'],
+    correctAnswer: 'Both'
   },
   {
     question: 'Which type of file handles logic?',
@@ -46,9 +46,9 @@ const questions = [
     correctAnswer: 'README'
   },
   {
-    question: 'Which command do you enter into GitBash to download class material for the first time?',
+    question: 'Which command is entered to upload files to a repository?',
     choices: ['git pull', 'git push', 'git clone', 'git download'],
-    correctAnswer: 'git clone'
+    correctAnswer: 'git push'
   }
 ];
 
@@ -69,6 +69,7 @@ function updateTimer() {
 }
 
 // Function to display question
+// Function to display question and choices
 function displayQuestion() {
   // Gets current question (first question since question index = 0)
   const question = questions[currentQuestionIndex];
@@ -76,6 +77,7 @@ function displayQuestion() {
   // Creates elements for questions and choices
   const questionElement = document.createElement('div');
   questionElement.innerText = question.question;
+  questionElement.style.color = 'white';
   const choicesElement = document.createElement('div');
   question.choices.forEach(function(choice) {
     const choiceElement = document.createElement('button');
@@ -87,6 +89,8 @@ function displayQuestion() {
         score += 10;
       } else {
         alert('Incorrect!');
+        // Decreases time by 10 seconds for every incorrect answer
+        timeLeft -= 10;
       }
       // Moves to the next question if there is one
       currentQuestionIndex++;
@@ -99,7 +103,13 @@ function displayQuestion() {
       } else {
         // If there are no more questions, quiz is completed with score pop up.
         clearInterval(timerInterval);
-        alert('You have completed the quiz! Your score is ' + score);
+        const name = prompt('You have completed the quiz! Enter your name to store your score in high scores:');
+        // Store user's score and name in localStorage
+        const highScores = JSON.parse(localStorage.getItem('highScores')) || [];
+        highScores.push({name, score});
+        localStorage.setItem('highScores', JSON.stringify(highScores));
+        // Display high scores
+        displayHighScores();
       }
     });
     choicesElement.appendChild(choiceElement);
@@ -111,4 +121,56 @@ function displayQuestion() {
   box.appendChild(choicesElement);
 }
 
+// Function to display high scores
+function displayHighScores() {
+  // Clear previous content from box
+  const box = document.getElementById('box');
+  box.innerHTML = '';
 
+  // Get highscores from local storage
+  const highScores = JSON.parse(localStorage.getItem('highScores')) || [];
+
+  // Sort highscores
+  highScores.sort((a, b) => b.score - a.score);
+
+  // Create elements to display high scores
+  const highScoresHeader = document.createElement('h2');
+  highScoresHeader.innerText = 'High Scores:';
+  const highScoresList = document.createElement('ul');
+  highScores.forEach(function(highScore) {
+    const highScoreItem = document.createElement('li');
+    highScoreItem.innerText = `${highScore.name}: ${highScore.score}`;
+    highScoresList.appendChild(highScoreItem);
+  });
+  const playAgainButton = document.createElement('button');
+  playAgainButton.innerText = 'Play Again';
+  playAgainButton.addEventListener('click', function() {
+    location.reload();
+  });
+
+  // Append elements to box
+  box.appendChild(highScoresHeader);
+  box.appendChild(highScoresList);
+  box.appendChild(playAgainButton);
+}
+
+// High scores button
+const highScoresBtn = document.getElementById('high-scores-btn');
+highScoresBtn.addEventListener('click', function() {
+  const highScores = JSON.parse(localStorage.getItem('highScores')) || [];
+  const highScoresList = document.createElement('ul');
+  highScores.forEach(function(score) {
+    const highScoreItem = document.createElement('li');
+    highScoreItem.innerText = score.name + ': ' + score.score;
+    highScoresList.appendChild(highScoreItem);
+  });
+  const box = document.getElementById('box');
+  box.innerHTML = '';
+  box.appendChild(highScoresList);
+});
+
+// Home page button
+const resetBtn = document.getElementById('home-Page');
+resetBtn.addEventListener('click', function() {
+  location.reload();
+});

@@ -28,10 +28,6 @@
     box-shadow: 0 0 25px rgb(0, 0, 0);
     margin-top: 30px;
 }
-.highscores {
-    font-size: 16px;
-    padding: 10px;
-}
 .title {
     font-size: 36px;
     font-weight: bold;
@@ -52,10 +48,4 @@ body {
     width: 200px;
 }
 
-#main-btn {
-    font-size: 16px;
-    padding: 10px;
-    font-weight: bold;
-    text-align: center;
-    width: 200px;
-}
+  
